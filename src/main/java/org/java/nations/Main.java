@@ -1,17 +1,14 @@
 package org.java.nations;
 
 import java.sql.Connection;
-import java.sql.Date;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Scanner;
-import java.util.TimeZone;
 
-import com.google.protobuf.Timestamp;
+import java.util.Scanner;
+
 
 public class Main {
 	
@@ -31,23 +28,30 @@ public class Main {
 					+ "join continents c2 \r\n"
 					+ "	on c2.continent_id = r.continent_id \r\n"
 					+ "order by c.name ";
-			
-			
+
+			System.out.print("inserisci il nome di una nazione: ");
+			String searchCountry = sc.nextLine();
 			
 			try (PreparedStatement ps = con.prepareStatement(sql)) {
-	
+				
+
 				
 				try (ResultSet rs = ps.executeQuery()) {
 					
 					while(rs.next()) {
 						
 						final String countryName = rs.getString(1);
-						final int countryId = rs.getInt(2);
-						final String regionName = rs.getString(3);
-						final String continentName = rs.getString(4);
 						
-						System.out.println(countryName + " - " + countryId + " - " 
-								+ regionName + " - " + continentName);
+						if(countryName.toLowerCase().contains(searchCountry)) {
+							final int countryId = rs.getInt(2);
+							final String regionName = rs.getString(3);
+							final String continentName = rs.getString(4);
+							
+							System.out.println(countryName + " - " + countryId + " - " 
+									+ regionName + " - " + continentName);
+						}
+						
+						
 					}
 				}				
 			} catch (SQLException ex) {
@@ -57,8 +61,5 @@ public class Main {
 			System.err.println("Error during connection to db");
 		}
 	}
-	
-
-		
-	}
+}
 
